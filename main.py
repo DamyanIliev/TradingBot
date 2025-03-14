@@ -6,7 +6,6 @@ from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 import time
 from binance.error import ClientError
-import winsound
 from playsound3 import playsound
 
 # Binance API keys
