@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 import time
 from binance.error import ClientError
-from playsound3 import playsound
+
 
 # Binance API keys
 api = 'eVJmzdRHtvD7cduRQ4YEfbLGT3MelccyA7eGkbRgWS2U0DMnxVknDVFkNVKbrvGp'
@@ -17,9 +17,6 @@ client = UMFutures(key=api, secret=secret)
 volume = 125  # volume for one order (if its 10 and leverage is 10, then you put 1 usdt to one position)
 leverage = 25
 qty = 1  # Amount of concurrent opened positions
-
-def play_sound():
-    playsound("trading_bot_audio.mp3")
 
 # Get account balance
 def get_balance_usdt():
@@ -191,7 +188,6 @@ def open_order_with_error_handling(symbol, side ,interval):
             closePosition=True
         )
         print(f"Take-Profit Order placed: {tp_order_response}")
-        play_sound()
 
     except Exception as e:
         print(f"Error placing order: {e}")
