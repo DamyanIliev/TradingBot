@@ -1,0 +1,4 @@
+binance-connector
+pandas
+ta
+playsound3
