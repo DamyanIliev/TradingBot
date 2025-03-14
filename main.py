@@ -249,7 +249,7 @@ while True:
             with ThreadPoolExecutor(max_workers=5) as executor:
                 futures = []
                 for symbol in symbols:
-                    for interval in ['1m']:
+                    for interval in ['15m']:
                         futures.append(executor.submit(process_symbol_interval, symbol, interval))
 
                 # Wait for all tasks to complete
@@ -257,7 +257,7 @@ while True:
                     future.result()
 
         print("Waiting for next cycle...\n")
-        time.sleep(50)  # Sleep 4 minutes before the next run
+        time.sleep(840)  # Sleep 4 minutes before the next run
 
     except Exception as e:
         print(f"⚠️ Error in main loop: {e}")
