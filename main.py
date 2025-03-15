@@ -7,7 +7,6 @@ import pandas as pd
 import time
 from binance.error import ClientError
 
-
 # Binance API keys
 api = 'eVJmzdRHtvD7cduRQ4YEfbLGT3MelccyA7eGkbRgWS2U0DMnxVknDVFkNVKbrvGp'
 secret = 'OdHnel7a2DhJFFafREQlJhoHmJWSOAejKlqoyJHvHi7QaF9yt2H7BOWHsFsjBFBm'
@@ -15,8 +14,10 @@ secret = 'OdHnel7a2DhJFFafREQlJhoHmJWSOAejKlqoyJHvHi7QaF9yt2H7BOWHsFsjBFBm'
 client = UMFutures(key=api, secret=secret)
 
 volume = 125  # volume for one order (if its 10 and leverage is 10, then you put 1 usdt to one position)
-leverage = 25
+leverage = 10
 qty = 1  # Amount of concurrent opened positions
+
+
 
 # Get account balance
 def get_balance_usdt():
@@ -78,7 +79,7 @@ def get_technical_indicators(symbol, interval):
     df['BB_Lower_30'] = bb_30.bollinger_lband()
     df['BB_Width_30'] = (df['BB_Upper_30'] - df['BB_Lower_30']) / df['BB_Middle_30']
 
-    length = 110
+    length = 250
     df['EMA_High_110'] = ta.trend.ema_indicator(df['High'], window=length)
     df['EMA_Low_110'] = ta.trend.ema_indicator(df['Low'], window=length)
     df['RMA_High_110'] = rma(df['High'], length=length)
@@ -140,7 +141,7 @@ def open_order_with_error_handling(symbol, side ,interval):
     df = get_technical_indicators(symbol, interval)
     atr = df['ATR'].iloc[-1]
 
-    sl_mult = 1.5  # Stop-Loss Coefficient
+    sl_mult = 2  # Stop-Loss Coefficient
     tp_mult = 2  # Take-Profit Coefficient
 
     if side == 'BUY':
@@ -245,7 +246,7 @@ while True:
             with ThreadPoolExecutor(max_workers=5) as executor:
                 futures = []
                 for symbol in symbols:
-                    for interval in ['15m']:
+                    for interval in ['1h']:
                         futures.append(executor.submit(process_symbol_interval, symbol, interval))
 
                 # Wait for all tasks to complete
@@ -253,7 +254,7 @@ while True:
                     future.result()
 
         print("Waiting for next cycle...\n")
-        time.sleep(840)  # Sleep 4 minutes before the next run
+        time.sleep(50)  # Sleep 4 minutes before the next run
 
     except Exception as e:
         print(f"⚠️ Error in main loop: {e}")
